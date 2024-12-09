@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "black"}, "id": "Diabetes", "label": "Diabetes", "shape": "dot", "title": "Diabetes"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Kidney Disease", "label": "Kidney Disease", "shape": "dot", "title": "Kidney Disease"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Neuropathy", "label": "Neuropathy", "shape": "dot", "title": "Neuropathy"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Peripheral Neuropathy", "label": "Peripheral Neuropathy", "shape": "dot", "title": "Peripheral Neuropathy"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Retinopathy", "label": "Retinopathy", "shape": "dot", "title": "Retinopathy"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Metformin", "label": "Metformin", "shape": "dot", "title": "Metformin"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Lifestyle Changes", "label": "Lifestyle Changes", "shape": "dot", "title": "Lifestyle Changes"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Hypertension", "label": "Hypertension", "shape": "dot", "title": "Hypertension"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Dialysis Requirement", "label": "Dialysis Requirement", "shape": "dot", "title": "Dialysis Requirement"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "High Blood Pressure", "label": "High Blood Pressure", "shape": "dot", "title": "High Blood Pressure"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Heart Disease", "label": "Heart Disease", "shape": "dot", "title": "Heart Disease"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "ACE Inhibitors", "label": "ACE Inhibitors", "shape": "dot", "title": "ACE Inhibitors"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Blood Pressure Monitors", "label": "Blood Pressure Monitors", "shape": "dot", "title": "Blood Pressure Monitors"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Heart Failure", "label": "Heart Failure", "shape": "dot", "title": "Heart Failure"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "High Cholesterol", "label": "High Cholesterol", "shape": "dot", "title": "High Cholesterol"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Chest Pain", "label": "Chest Pain", "shape": "dot", "title": "Chest Pain"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Obesity", "label": "Obesity", "shape": "dot", "title": "Obesity"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Statins", "label": "Statins", "shape": "dot", "title": "Statins"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Exercise", "label": "Exercise", "shape": "dot", "title": "Exercise"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Sleep Apnea", "label": "Sleep Apnea", "shape": "dot", "title": "Sleep Apnea"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Heart Health", "label": "Heart Health", "shape": "dot", "title": "Heart Health"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Cardiovascular Health", "label": "Cardiovascular Health", "shape": "dot", "title": "Cardiovascular Health"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Weight Management", "label": "Weight Management", "shape": "dot", "title": "Weight Management"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Smoking", "label": "Smoking", "shape": "dot", "title": "Smoking"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Lung Cancer", "label": "Lung Cancer", "shape": "dot", "title": "Lung Cancer"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Chemotherapy", "label": "Chemotherapy", "shape": "dot", "title": "Chemotherapy"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Fatigue", "label": "Fatigue", "shape": "dot", "title": "Fatigue"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Physical Therapy", "label": "Physical Therapy", "shape": "dot", "title": "Physical Therapy"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Joint Mobility", "label": "Joint Mobility", "shape": "dot", "title": "Joint Mobility"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Muscle Weakness", "label": "Muscle Weakness", "shape": "dot", "title": "Muscle Weakness"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Vitamin D Deficiency", "label": "Vitamin D Deficiency", "shape": "dot", "title": "Vitamin D Deficiency"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Osteoporosis", "label": "Osteoporosis", "shape": "dot", "title": "Osteoporosis"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Fractures", "label": "Fractures", "shape": "dot", "title": "Fractures"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Bone Fractures", "label": "Bone Fractures", "shape": "dot", "title": "Bone Fractures"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Calcium Supplements", "label": "Calcium Supplements", "shape": "dot", "title": "Calcium Supplements"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Laser Therapy", "label": "Laser Therapy", "shape": "dot", "title": "Laser Therapy"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Ophthalmology", "label": "Ophthalmology", "shape": "dot", "title": "Ophthalmology"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Vision Disorders", "label": "Vision Disorders", "shape": "dot", "title": "Vision Disorders"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Stroke", "label": "Stroke", "shape": "dot", "title": "Stroke"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Rehabilitation Therapy", "label": "Rehabilitation Therapy", "shape": "dot", "title": "Rehabilitation Therapy"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Motor Function", "label": "Motor Function", "shape": "dot", "title": "Motor Function"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Mental Health", "label": "Mental Health", "shape": "dot", "title": "Mental Health"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Nerve Damage", "label": "Nerve Damage", "shape": "dot", "title": "Nerve Damage"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "ECG", "label": "ECG", "shape": "dot", "title": "ECG"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Cardiology", "label": "Cardiology", "shape": "dot", "title": "Cardiology"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Heart Disorders", "label": "Heart Disorders", "shape": "dot", "title": "Heart Disorders"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Home Monitoring", "label": "Home Monitoring", "shape": "dot", "title": "Home Monitoring"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "CPAP Machines", "label": "CPAP Machines", "shape": "dot", "title": "CPAP Machines"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Breathing Patterns", "label": "Breathing Patterns", "shape": "dot", "title": "Breathing Patterns"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Asthma", "label": "Asthma", "shape": "dot", "title": "Asthma"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Airborne Allergens", "label": "Airborne Allergens", "shape": "dot", "title": "Airborne Allergens"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Pollen", "label": "Pollen", "shape": "dot", "title": "Pollen"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Seasonal Allergies", "label": "Seasonal Allergies", "shape": "dot", "title": "Seasonal Allergies"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Antihistamines", "label": "Antihistamines", "shape": "dot", "title": "Antihistamines"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Allergic Reactions", "label": "Allergic Reactions", "shape": "dot", "title": "Allergic Reactions"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Skin Rashes", "label": "Skin Rashes", "shape": "dot", "title": "Skin Rashes"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Topical Creams", "label": "Topical Creams", "shape": "dot", "title": "Topical Creams"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Eczema", "label": "Eczema", "shape": "dot", "title": "Eczema"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Skin Irritation", "label": "Skin Irritation", "shape": "dot", "title": "Skin Irritation"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Moisturizers", "label": "Moisturizers", "shape": "dot", "title": "Moisturizers"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Dry Skin", "label": "Dry Skin", "shape": "dot", "title": "Dry Skin"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Dehydration", "label": "Dehydration", "shape": "dot", "title": "Dehydration"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Heat Stroke", "label": "Heat Stroke", "shape": "dot", "title": "Heat Stroke"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Rehydration Therapy", "label": "Rehydration Therapy", "shape": "dot", "title": "Rehydration Therapy"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Electrolyte Imbalance", "label": "Electrolyte Imbalance", "shape": "dot", "title": "Electrolyte Imbalance"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Muscle Cramps", "label": "Muscle Cramps", "shape": "dot", "title": "Muscle Cramps"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Magnesium Supplements", "label": "Magnesium Supplements", "shape": "dot", "title": "Magnesium Supplements"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Muscle Health", "label": "Muscle Health", "shape": "dot", "title": "Muscle Health"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Pain Relievers", "label": "Pain Relievers", "shape": "dot", "title": "Pain Relievers"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Chronic Pain", "label": "Chronic Pain", "shape": "dot", "title": "Chronic Pain"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Arthritis", "label": "Arthritis", "shape": "dot", "title": "Arthritis"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Anti-Inflammatory Drugs", "label": "Anti-Inflammatory Drugs", "shape": "dot", "title": "Anti-Inflammatory Drugs"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Joint Swelling", "label": "Joint Swelling", "shape": "dot", "title": "Joint Swelling"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Reduced Mobility", "label": "Reduced Mobility", "shape": "dot", "title": "Reduced Mobility"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Assistive Devices", "label": "Assistive Devices", "shape": "dot", "title": "Assistive Devices"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Elderly Patients", "label": "Elderly Patients", "shape": "dot", "title": "Elderly Patients"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Bone Grafts", "label": "Bone Grafts", "shape": "dot", "title": "Bone Grafts"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Orthopedic Surgery", "label": "Orthopedic Surgery", "shape": "dot", "title": "Orthopedic Surgery"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Severe Fractures", "label": "Severe Fractures", "shape": "dot", "title": "Severe Fractures"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Reduced Quality of Life", "label": "Reduced Quality of Life", "shape": "dot", "title": "Reduced Quality of Life"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Chronic Illness", "label": "Chronic Illness", "shape": "dot", "title": "Chronic Illness"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Depression", "label": "Depression", "shape": "dot", "title": "Depression"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "SSRIs", "label": "SSRIs", "shape": "dot", "title": "SSRIs"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Anxiety Disorders", "label": "Anxiety Disorders", "shape": "dot", "title": "Anxiety Disorders"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Sleep Disturbances", "label": "Sleep Disturbances", "shape": "dot", "title": "Sleep Disturbances"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Melatonin Supplements", "label": "Melatonin Supplements", "shape": "dot", "title": "Melatonin Supplements"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Sleep Quality", "label": "Sleep Quality", "shape": "dot", "title": "Sleep Quality"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Mental Well-being", "label": "Mental Well-being", "shape": "dot", "title": "Mental Well-being"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Heart-Healthy Diet", "label": "Heart-Healthy Diet", "shape": "dot", "title": "Heart-Healthy Diet"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Cholesterol Levels", "label": "Cholesterol Levels", "shape": "dot", "title": "Cholesterol Levels"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Blood Tests", "label": "Blood Tests", "shape": "dot", "title": "Blood Tests"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Diagnose Conditions", "label": "Diagnose Conditions", "shape": "dot", "title": "Diagnose Conditions"}, {"color": "#97c2fc", "font": {"color": "black"}, "id": "Conditions", "label": "Conditions", "shape": "dot", "title": "Conditions"}]);
+                  edges = new vis.DataSet([{"from": "Diabetes", "label": "increases risk of", "title": "increases risk of", "to": "Kidney Disease"}, {"from": "Diabetes", "label": "causes", "title": "causes", "to": "Neuropathy"}, {"from": "Diabetes", "label": "causes", "title": "causes", "to": "Peripheral Neuropathy"}, {"from": "Diabetes", "label": "causes", "title": "causes", "to": "Retinopathy"}, {"from": "Diabetes", "label": "treated with", "title": "treated with", "to": "Metformin"}, {"from": "Diabetes", "label": "managed by", "title": "managed by", "to": "Lifestyle Changes"}, {"from": "Kidney Disease", "label": "caused by", "title": "caused by", "to": "Hypertension"}, {"from": "Kidney Disease", "label": "leads to", "title": "leads to", "to": "Dialysis Requirement"}, {"from": "Kidney Disease", "label": "linked to", "title": "linked to", "to": "High Blood Pressure"}, {"from": "Hypertension", "label": "increases risk of", "title": "increases risk of", "to": "Heart Disease"}, {"from": "Hypertension", "label": "treated with", "title": "treated with", "to": "ACE Inhibitors"}, {"from": "Hypertension", "label": "monitored by", "title": "monitored by", "to": "Blood Pressure Monitors"}, {"from": "Heart Disease", "label": "leads to", "title": "leads to", "to": "Heart Failure"}, {"from": "Heart Disease", "label": "caused by", "title": "caused by", "to": "High Cholesterol"}, {"from": "Heart Disease", "label": "causes", "title": "causes", "to": "Chest Pain"}, {"from": "High Cholesterol", "label": "linked to", "title": "linked to", "to": "Obesity"}, {"from": "High Cholesterol", "label": "treated with", "title": "treated with", "to": "Statins"}, {"from": "Obesity", "label": "causes", "title": "causes", "to": "Diabetes"}, {"from": "Obesity", "label": "managed by", "title": "managed by", "to": "Exercise"}, {"from": "Obesity", "label": "linked to", "title": "linked to", "to": "Sleep Apnea"}, {"from": "Exercise", "label": "recommended for", "title": "recommended for", "to": "Heart Health"}, {"from": "Exercise", "label": "benefits", "title": "benefits", "to": "Cardiovascular Health"}, {"from": "Exercise", "label": "reduces risk of", "title": "reduces risk of", "to": "Hypertension"}, {"from": "Exercise", "label": "recommended for", "title": "recommended for", "to": "Weight Management"}, {"from": "Smoking", "label": "increases risk of", "title": "increases risk of", "to": "Heart Disease"}, {"from": "Smoking", "label": "causes", "title": "causes", "to": "Lung Cancer"}, {"from": "Lung Cancer", "label": "treated with", "title": "treated with", "to": "Chemotherapy"}, {"from": "Chemotherapy", "label": "causes", "title": "causes", "to": "Fatigue"}, {"from": "Fatigue", "label": "managed by", "title": "managed by", "to": "Physical Therapy"}, {"from": "Physical Therapy", "label": "improves", "title": "improves", "to": "Joint Mobility"}, {"from": "Physical Therapy", "label": "recommended for", "title": "recommended for", "to": "Muscle Weakness"}, {"from": "Muscle Weakness", "label": "associated with", "title": "associated with", "to": "Vitamin D Deficiency"}, {"from": "Vitamin D Deficiency", "label": "causes", "title": "causes", "to": "Osteoporosis"}, {"from": "Osteoporosis", "label": "causes", "title": "causes", "to": "Fractures"}, {"from": "Osteoporosis", "label": "leads to", "title": "leads to", "to": "Bone Fractures"}, {"from": "Bone Fractures", "label": "treated with", "title": "treated with", "to": "Calcium Supplements"}, {"from": "Calcium Supplements", "label": "recommended for", "title": "recommended for", "to": "Osteoporosis"}, {"from": "Retinopathy", "label": "treated with", "title": "treated with", "to": "Laser Therapy"}, {"from": "Laser Therapy", "label": "used in", "title": "used in", "to": "Ophthalmology"}, {"from": "Ophthalmology", "label": "treats", "title": "treats", "to": "Vision Disorders"}, {"from": "High Blood Pressure", "label": "causes", "title": "causes", "to": "Stroke"}, {"from": "Stroke", "label": "treated with", "title": "treated with", "to": "Rehabilitation Therapy"}, {"from": "Rehabilitation Therapy", "label": "improves", "title": "improves", "to": "Motor Function"}, {"from": "Rehabilitation Therapy", "label": "supports", "title": "supports", "to": "Mental Health"}, {"from": "Motor Function", "label": "affected by", "title": "affected by", "to": "Nerve Damage"}, {"from": "Nerve Damage", "label": "caused by", "title": "caused by", "to": "Diabetes"}, {"from": "Chest Pain", "label": "diagnosed by", "title": "diagnosed by", "to": "ECG"}, {"from": "ECG", "label": "used in", "title": "used in", "to": "Cardiology"}, {"from": "Cardiology", "label": "treats", "title": "treats", "to": "Heart Disorders"}, {"from": "Heart Disorders", "label": "linked to", "title": "linked to", "to": "Hypertension"}, {"from": "Blood Pressure Monitors", "label": "recommended for", "title": "recommended for", "to": "Home Monitoring"}, {"from": "Sleep Apnea", "label": "managed by", "title": "managed by", "to": "CPAP Machines"}, {"from": "CPAP Machines", "label": "improve", "title": "improve", "to": "Breathing Patterns"}, {"from": "Breathing Patterns", "label": "affected by", "title": "affected by", "to": "Asthma"}, {"from": "Asthma", "label": "triggered by", "title": "triggered by", "to": "Airborne Allergens"}, {"from": "Airborne Allergens", "label": "include", "title": "include", "to": "Pollen"}, {"from": "Pollen", "label": "causes", "title": "causes", "to": "Seasonal Allergies"}, {"from": "Seasonal Allergies", "label": "treated with", "title": "treated with", "to": "Antihistamines"}, {"from": "Antihistamines", "label": "reduce", "title": "reduce", "to": "Allergic Reactions"}, {"from": "Allergic Reactions", "label": "cause", "title": "cause", "to": "Skin Rashes"}, {"from": "Skin Rashes", "label": "treated with", "title": "treated with", "to": "Topical Creams"}, {"from": "Topical Creams", "label": "recommended for", "title": "recommended for", "to": "Eczema"}, {"from": "Eczema", "label": "causes", "title": "causes", "to": "Skin Irritation"}, {"from": "Skin Irritation", "label": "managed by", "title": "managed by", "to": "Moisturizers"}, {"from": "Moisturizers", "label": "reduce", "title": "reduce", "to": "Dry Skin"}, {"from": "Dry Skin", "label": "linked to", "title": "linked to", "to": "Dehydration"}, {"from": "Dehydration", "label": "caused by", "title": "caused by", "to": "Heat Stroke"}, {"from": "Heat Stroke", "label": "managed by", "title": "managed by", "to": "Rehydration Therapy"}, {"from": "Rehydration Therapy", "label": "prevents", "title": "prevents", "to": "Electrolyte Imbalance"}, {"from": "Electrolyte Imbalance", "label": "causes", "title": "causes", "to": "Muscle Cramps"}, {"from": "Muscle Cramps", "label": "treated with", "title": "treated with", "to": "Magnesium Supplements"}, {"from": "Magnesium Supplements", "label": "recommended for", "title": "recommended for", "to": "Muscle Health"}, {"from": "Muscle Health", "label": "improved by", "title": "improved by", "to": "Exercise"}, {"from": "Weight Management", "label": "reduces risk of", "title": "reduces risk of", "to": "Diabetes"}, {"from": "Peripheral Neuropathy", "label": "treated with", "title": "treated with", "to": "Pain Relievers"}, {"from": "Pain Relievers", "label": "used for", "title": "used for", "to": "Chronic Pain"}, {"from": "Chronic Pain", "label": "managed by", "title": "managed by", "to": "Physical Therapy"}, {"from": "Joint Mobility", "label": "reduced by", "title": "reduced by", "to": "Arthritis"}, {"from": "Arthritis", "label": "treated with", "title": "treated with", "to": "Anti-Inflammatory Drugs"}, {"from": "Anti-Inflammatory Drugs", "label": "reduce", "title": "reduce", "to": "Joint Swelling"}, {"from": "Joint Swelling", "label": "causes", "title": "causes", "to": "Reduced Mobility"}, {"from": "Reduced Mobility", "label": "managed by", "title": "managed by", "to": "Assistive Devices"}, {"from": "Assistive Devices", "label": "recommended for", "title": "recommended for", "to": "Elderly Patients"}, {"from": "Elderly Patients", "label": "at risk of", "title": "at risk of", "to": "Osteoporosis"}, {"from": "Fractures", "label": "treated with", "title": "treated with", "to": "Bone Grafts"}, {"from": "Bone Grafts", "label": "used in", "title": "used in", "to": "Orthopedic Surgery"}, {"from": "Orthopedic Surgery", "label": "required for", "title": "required for", "to": "Severe Fractures"}, {"from": "Severe Fractures", "label": "lead to", "title": "lead to", "to": "Reduced Quality of Life"}, {"from": "Reduced Quality of Life", "label": "improved by", "title": "improved by", "to": "Rehabilitation Therapy"}, {"from": "Mental Health", "label": "affected by", "title": "affected by", "to": "Chronic Illness"}, {"from": "Chronic Illness", "label": "linked to", "title": "linked to", "to": "Depression"}, {"from": "Depression", "label": "treated with", "title": "treated with", "to": "SSRIs"}, {"from": "SSRIs", "label": "used for", "title": "used for", "to": "Anxiety Disorders"}, {"from": "Anxiety Disorders", "label": "cause", "title": "cause", "to": "Sleep Disturbances"}, {"from": "Sleep Disturbances", "label": "managed by", "title": "managed by", "to": "Melatonin Supplements"}, {"from": "Melatonin Supplements", "label": "improve", "title": "improve", "to": "Sleep Quality"}, {"from": "Sleep Quality", "label": "linked to", "title": "linked to", "to": "Mental Well-being"}, {"from": "Mental Well-being", "label": "improved by", "title": "improved by", "to": "Exercise"}, {"from": "Cardiovascular Health", "label": "enhanced by", "title": "enhanced by", "to": "Heart-Healthy Diet"}, {"from": "Heart-Healthy Diet", "label": "reduces", "title": "reduces", "to": "Cholesterol Levels"}, {"from": "Cholesterol Levels", "label": "monitored by", "title": "monitored by", "to": "Blood Tests"}, {"from": "Blood Tests", "label": "used to", "title": "used to", "to": "Diagnose Conditions"}, {"from": "Conditions", "label": "include", "title": "include", "to": "Diabetes"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
